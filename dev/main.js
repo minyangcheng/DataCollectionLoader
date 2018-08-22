@@ -1,21 +1,17 @@
 import Vue from 'vue'
-import App from './App.vue'
+import App from './App'
+import router from './router'
+import monitor from '../src/monitor'
 
+Vue.config.productionTip = false;
 
-//开发时
-import PopupPlugin from './../src/index.js'
-
-//测试生成的文件
-// import PopupPlugin from './../dist/index.js'
-// import PopupPluginCss from './../dist/style.css'
-
-//测试npm上的库
-// import PopupPlugin from 'vue-lite-popup';
-// import PopupPluginCss from 'vue-lite-popup/dist/style.css'
-
-Vue.use(PopupPlugin);
+monitor.onEvent = event => {
+  console.log(event)
+}
 
 new Vue({
   el: '#app',
-  render: h => h(App)
-})
+  router,
+  template: '<App/>',
+  components: {App}
+});

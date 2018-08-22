@@ -1,6 +1,5 @@
 <template>
   <div>
-    <router-view/>
   </div>
 </template>
 
@@ -8,12 +7,13 @@
   export default {
     data() {
       return {
-        name: 'app-comp'
+        msg: 'MainPage'
       }
     },
+    methods: {}
   }
 </script>
 
-<style type="text/scss">
-  @import "./assets/css/normailze.css";
+<style scoped>
+
 </style>

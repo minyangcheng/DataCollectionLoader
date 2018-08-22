@@ -4,48 +4,56 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 var merge = require('webpack-merge')
 
-var baseConfig = {
-  entry: './dev/main.js',
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/',
-    filename: 'index.js'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-      },
-      {
-        test: /\.js$/,
-        loader: "babel-loader",
-      },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader',
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]'
-        }
-      }
-    ]
-  },
-  plugins: [
-    new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({template: './index.html', hash: true}),
-  ]
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
 }
+
+var baseConfig = {}
 
 var outputConfig
 
 if (process.env.NODE_ENV == 'development') {
   outputConfig = merge(baseConfig, {
+    entry: './dev/main.js',
+    output: {
+      path: path.resolve(__dirname, './dist'),
+      publicPath: '/',
+      filename: 'bundle.js'
+    },
+    resolve: {
+      extensions: ['.js', '.vue', '.json'],
+      alias: {
+        'vue$': 'vue/dist/vue.esm.js',
+      }
+    },
+    module: {
+      rules: [
+        {
+          test: /\.vue$/,
+          loader: ['vue-loader', 'data-collection-loader'],
+        },
+        {
+          test: /\.js$/,
+          loader: "babel-loader",
+        },
+        {
+          test: /\.css$/,
+          loader: 'style-loader!css-loader',
+        },
+        {
+          test: /\.(png|jpg|gif|svg)$/,
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]?[hash]'
+          }
+        }
+      ]
+    },
+    plugins: [
+      new VueLoaderPlugin(),
+      new HtmlWebpackPlugin({template: './index.html', hash: true}),
+    ],
     mode: 'development',
-    devtool: '#cheap-module-eval-source-map',
     devServer: {
       contentBase: path.join(__dirname, 'dist'),
       compress: true,
@@ -53,12 +61,28 @@ if (process.env.NODE_ENV == 'development') {
       host: '0.0.0.0',
       historyApiFallback: true,
     },
-    plugins: []
   })
 } else if (process.env.NODE_ENV == 'production') {
   outputConfig = merge(baseConfig, {
+    entry: './src/monitor.js',
+    output: {
+      path: path.resolve(__dirname, './dist'),
+      publicPath: '/',
+      filename: 'monitor.js'
+    },
+    resolve: {
+      extensions: ['.js', '.json'],
+      alias: {}
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          loader: "babel-loader",
+        },
+      ]
+    },
     mode: 'production',
-    devtool: '#source-map',
   })
 }
 
