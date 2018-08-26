@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import monitor from '../src/monitor'
+import monitor from 'data-collection-loader/src/monitor'
 
 Vue.config.productionTip = false;
 
